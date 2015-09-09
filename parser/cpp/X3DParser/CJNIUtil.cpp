@@ -115,13 +115,13 @@ bool CJNIUtil::createJavaVM(char *confFile)
 	// Specification of java.class.path
 	pJavaClassPath = conf.getStringValue("java.class.path");
 	if (pJavaClassPath)	{
-		sprintf(javaClassPath, "-Djava.class.path=%s", pJavaClassPath);
+		sprintf_s(javaClassPath, "-Djava.class.path=%s", pJavaClassPath);
 		nOptions++;
 	}
 	// Specification of java.library.path
 	pJavaLibraryPath = conf.getStringValue("java.library.path");
 	if (pJavaLibraryPath) {
-		sprintf(javaLibraryPath, "-Djava.library.path=%s", pJavaLibraryPath);
+		sprintf_s(javaLibraryPath, "-Djava.library.path=%s", pJavaLibraryPath);
 		nOptions++;
 	}
 	// The number of other options

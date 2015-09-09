@@ -81,7 +81,7 @@ void CX3DParser::printLog(char *format, ...)
 		va_list arg;
 
 		va_start(arg, format);
-		vsprintf(msg, format, arg);
+		vsprintf_s(msg, format, arg);
 
 		fprintf(CX3DParser::getDebugLogFp(), msg);
 
@@ -100,7 +100,7 @@ void CX3DParser::printIndentLog(int indentLevel, char *format, ...)
 		va_list arg;
 
 		va_start(arg, format);
-		vsprintf(msg, format, arg);
+		vsprintf_s(msg, format, arg);
 
 		CX3DParser::printIndent(indentLevel);
 		fprintf(CX3DParser::getDebugLogFp(), msg);

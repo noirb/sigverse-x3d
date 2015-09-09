@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 		break;
 
 	case 6:
-		Test_calcSimplifiedShape(parser, vrmlFile);
+//		Test_calcSimplifiedShape(parser, vrmlFile);
 		break;
 
 	case 7:
