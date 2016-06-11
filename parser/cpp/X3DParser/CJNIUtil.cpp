@@ -10,8 +10,8 @@
 #include <jni.h>
 #if (defined(WIN32) || defined(_WIN32))
 #include <windows.h>
-#endif
 #include <sys/stat.h>
+#endif
 
 CJNIUtil *g_jniUtil = NULL;
 
@@ -89,6 +89,8 @@ bool CJNIUtil::createJavaVM(char *confFile)
 {
 	if (m_jvm) { return true; }
 
+#if (defined(WIN32) || defined(_WIN32))
+
 	const char* key_jre = "Software\\JavaSoft\\Java Runtime Environment";
 
 	// Read "CurrentVersion" from registry.
@@ -118,6 +120,7 @@ bool CJNIUtil::createJavaVM(char *confFile)
 	HMODULE module = LoadLibrary(reinterpret_cast<char*>(buffer));
 	
 	auto func_CreateJavaVM = reinterpret_cast<decltype(JNI_CreateJavaVM)*>(GetProcAddress(module, "JNI_CreateJavaVM"));
+#endif
 
 
 	JavaVMOption   *options = NULL;
@@ -191,13 +194,20 @@ bool CJNIUtil::createJavaVM(char *confFile)
 
 	//	fill in startup structure
 	vm_args.version = JNI_VERSION_1_2;
-//	JNI_GetDefaultJavaVMInitArgs(&vm_args);
+#if (defined(WIN32) || defined(_WIN32))
+	// nothing
+#else
+	JNI_GetDefaultJavaVMInitArgs(&vm_args);
+#endif
 	vm_args.options = options;
 	vm_args.nOptions = nOptions;
 
 	// Starting Java VM
+#if (defined(WIN32) || defined(_WIN32))
 	ret = (*func_CreateJavaVM)(&m_jvm, (void **)&m_env, &vm_args);
-	//ret = JNI_CreateJavaVM(&m_jvm, (void **)&m_env, &vm_args);
+#else
+	ret = JNI_CreateJavaVM(&m_jvm, (void **)&m_env, &vm_args);
+#endif
 
 	if (ret < 0) {
 		CX3DParser::printLog("Failed to create Java VM\n");
