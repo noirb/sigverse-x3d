@@ -21,7 +21,6 @@
     <ClCompile Include="Test_GetDefNames.cpp" />
     <ClCompile Include="Test_GetDefNode.cpp" />
     <ClCompile Include="Test_GetNodeName.cpp" />
-    <ClCompile Include="test_libsigvx3d.cpp" />
     <ClCompile Include="Test_LoopFieldOfNode.cpp" />
     <ClCompile Include="Test_OpenHRP.cpp" />
     <ClCompile Include="Test_SimpleParse.cpp" />

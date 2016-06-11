@@ -11,6 +11,7 @@
 #if (defined(WIN32) || defined(_WIN32))
 #include <windows.h>
 #endif
+#include <sys/stat.h>
 
 CJNIUtil *g_jniUtil = NULL;
 
@@ -88,6 +89,37 @@ bool CJNIUtil::createJavaVM(char *confFile)
 {
 	if (m_jvm) { return true; }
 
+	const char* key_jre = "Software\\JavaSoft\\Java Runtime Environment";
+
+	// Read "CurrentVersion" from registry.
+	HKEY key;
+	RegOpenKeyEx(HKEY_LOCAL_MACHINE, key_jre, NULL, KEY_READ, &key);
+	BYTE buffer[256];
+	
+	DWORD size = sizeof(buffer);
+	RegQueryValueEx(key, "CurrentVersion", NULL, NULL, buffer, &size);
+	RegCloseKey(key);
+
+	// Read "RuntimeLib" from registry.
+	std::string key_jre_ver(key_jre);
+	key_jre_ver.append("\\").append(reinterpret_cast<char*>(buffer));
+	RegOpenKeyEx(HKEY_LOCAL_MACHINE, key_jre_ver.c_str(), NULL, KEY_READ, &key);
+	size = sizeof(buffer);
+	RegQueryValueEx(key, "RuntimeLib", NULL, NULL, buffer, &size);
+	RegCloseKey(key);
+	
+	struct stat buf;
+	std::string str;
+	str.append(buffer, buffer + size);
+
+	bool existDLL = stat(str.c_str(), &buf) == 0;
+
+	// Load the jvm.dll dynamically.
+	HMODULE module = LoadLibrary(reinterpret_cast<char*>(buffer));
+	
+	auto func_CreateJavaVM = reinterpret_cast<decltype(JNI_CreateJavaVM)*>(GetProcAddress(module, "JNI_CreateJavaVM"));
+
+
 	JavaVMOption   *options = NULL;
 	JavaVMInitArgs vm_args;
 	const char     *pJavaClassPath   = NULL;
@@ -159,12 +191,14 @@ bool CJNIUtil::createJavaVM(char *confFile)
 
 	//	fill in startup structure
 	vm_args.version = JNI_VERSION_1_2;
-	JNI_GetDefaultJavaVMInitArgs(&vm_args);
+//	JNI_GetDefaultJavaVMInitArgs(&vm_args);
 	vm_args.options = options;
 	vm_args.nOptions = nOptions;
 
 	// Starting Java VM
-	ret = JNI_CreateJavaVM(&m_jvm, (void **)&m_env, &vm_args);
+	ret = (*func_CreateJavaVM)(&m_jvm, (void **)&m_env, &vm_args);
+	//ret = JNI_CreateJavaVM(&m_jvm, (void **)&m_env, &vm_args);
+
 	if (ret < 0) {
 		CX3DParser::printLog("Failed to create Java VM\n");
 		return false;
