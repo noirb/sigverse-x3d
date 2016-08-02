@@ -59,11 +59,20 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\libSgvX3D;C:\src\SIGVWLibs\jdk\1.6\x86\include;C:\src\SIGVWLibs\jdk\1.6\x86\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+        $(SolutionDir)\X3DParser;
+        $(JDK_ROOT_PATH)\include;
+        $(JDK_ROOT_PATH)\include\win32;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\src\SIGVWLibs\jdk\1.6\x86\lib;..\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+        $(JDK_ROOT_PATH)\lib;
+        $(SolutionDir)\Debug;
+        %(AdditionalLibraryDirectories)
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>libSgvX3D.lib;jvm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -73,13 +82,20 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>C:\SIGVerse\ext\Java\jdk1.8.0_45\include;C:\SIGVerse\ext\Java\jdk1.8.0_45\include\win32;..\X3DParser</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>
+        $(SolutionDir)\X3DParser;
+        $(JDK_ROOT_PATH)\include;
+        $(JDK_ROOT_PATH)\include\win32;
+      </AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\SIGVerse\GitHub\x3d\parser\cpp\Release;C:\SIGVerse\ext\Java\jdk1.8.0_45\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>
+        $(SolutionDir)\Release;
+        $(JDK_ROOT_PATH)\lib
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>jvm.lib;libSgvX3D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

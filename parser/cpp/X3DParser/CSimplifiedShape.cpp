@@ -12,6 +12,7 @@
 #include "CX3DShapeNode.h"
 #include "CX3DIndexedFaceSetNode.h"
 #include "CX3DCoordinateNode.h"
+#define _USE_MATH_DEFINES // needed to ensure constants like M_PI are defined
 #include <math.h>
 #include <vector>
 
